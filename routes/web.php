@@ -1,5 +1,5 @@
 <?php
-
+use App\Events\MessagePosted;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -10,6 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Auth::routes();
 
 Route::get('/', function () {
     return view('welcome');
@@ -25,12 +26,13 @@ Route::get('/messages',function(){
 
 Route::post('/messages',function(){
 	$user = Auth::user();
-	$user->messages()->create([
+	$message = $user->messages()->create([
 		'message' => request()->get('message')
 		]);
-		return ['status' => 'OK']; 
-})->middleware('auth');
+	//Announce that a new message has been posted
+	broadcast(new MessagePosted($message, $user))->toOthers();
 
-Auth::routes();
+	return ['status' => 'OK']; 
+})->middleware('auth');
 
 Route::get('/home', 'HomeController@index')->name('home');

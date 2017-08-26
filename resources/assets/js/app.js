@@ -9,6 +9,7 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -32,12 +33,21 @@ const app = new Vue({
             //Persist to the database etc
             axios.post('/messages', message).then(response=>{
                 //Do whatever
-            })
+            });
     	}
     },
     created(){
     	axios.get('/messages').then(response =>{
     		this.messages = response.data;
     	});
+
+        Echo.join('chatroom')
+            .listen('MessagePosted', (e) => {
+            this.messages.push({
+              message: e.message.message,
+              user: e.user
+            });
+            // console.log(e);
+          });
     }
 });
