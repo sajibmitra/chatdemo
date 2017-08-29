@@ -1205,7 +1205,8 @@ Vue.component('chat-composer', __webpack_require__(55));
 var app = new Vue({
     el: '#app',
     data: {
-        messages: []
+        messages: [],
+        usersInRoom: []
     },
     methods: {
         addMessage: function addMessage(message) {
@@ -1224,12 +1225,20 @@ var app = new Vue({
             _this.messages = response.data;
         });
 
-        Echo.join('chatroom').listen('MessagePosted', function (e) {
+        Echo.join('chatroom').here(function (users) {
+            _this.usersInRoom = users;
+        }).joining(function (user) {
+            _this.usersInRoom.push(user);
+        }).leaving(function (user) {
+            _this.usersInRoom = _this.usersInRoom.filter(function (u) {
+                return u != user;
+            });
+        }).listen('MessagePosted', function (e) {
             _this.messages.push({
                 message: e.message.message,
                 user: e.user
             });
-            // console.log(e);
+            //console.log(e);
         });
     }
 });
@@ -1293,7 +1302,7 @@ window.Pusher = __webpack_require__(39);
 
 window.Echo = new __WEBPACK_IMPORTED_MODULE_0_laravel_echo___default.a({
   broadcaster: 'pusher',
-  key: 'b1177286c5a0b5ebb279',
+  key: 'b18783159d2b3695b86d',
   cluster: 'eu',
   encrypted: false
 });
