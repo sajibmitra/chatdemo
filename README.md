@@ -1,7 +1,7 @@
 ## Chatdemo
 Chatdemo is a simple chatting example was developed in Laravel Framework 5.4 by using Pusher API and Laravel-Echo Broadcasting service. 
 ## Installation
-**Open Terminal and run following command:**
+**Open Terminal (go to `chatdemo` directory) and run following command:**
 ``` markdown
 $ composer install
 ```
