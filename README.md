@@ -51,5 +51,5 @@ $ npm run dev
 ```
 **Run server and Enjoy Chatting**   :smiley:
 ```
-$ pa serve
+$ php artisan serve
 ```
